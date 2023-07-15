@@ -1,36 +1,49 @@
 package org.example.api;
+import org.example.Exception.InvalidDirectoryException;
+import org.example.Exception.FileNotFoundException;
+import org.example.Exception.InvalidFileException;
+import org.example.Service.FileServiceImpl;
 import org.example.model.Directory;
 import org.example.model.MyFile;
 
 public class SystemApi {
-    private final IFileApi api = new FileService();
+    private final FileServiceImpl service = new FileServiceImpl();
 
-    public MyFile addFile(Directory directory, MyFile myFile) {
-        return api.addFile(directory, myFile);
+    public MyFile addFile(String pathToDirectory, MyFile myFile) throws InvalidFileException, InvalidDirectoryException {
+        return service.addFile(FileServiceImpl.findDirectory(pathToDirectory), myFile);
     }
 
-    public MyFile removeFile(Directory directory, String fileName) {
-
-        return api.removeFile(directory, fileName);
+    public MyFile addFile(String pathToDirectory, Long fileID) throws InvalidFileException, InvalidDirectoryException {
+        return service.addFile(FileServiceImpl.findDirectory(pathToDirectory), service.getFile(fileID));
     }
 
-    public MyFile removeFile(String fileName) {
-        return api.removeFile(fileName);
+    public MyFile removeFile(Long fileID) throws FileNotFoundException {
+        MyFile file = FileServiceImpl.findFileByID(fileID);
+        return service.removeFile(file);
     }
 
-    public MyFile getFile(String fileName) {
-        return api.getFile(fileName);
+    public MyFile getFile(Long fileID) throws FileNotFoundException {
+        return service.getFile(fileID);
     }
 
-    public String readFile(String fileName) {
-        return api.readFile(fileName);
+
+    public String readFile(Long fileID) throws FileNotFoundException {
+        return service.readFile(FileServiceImpl.findFileByID(fileID));
     }
 
-    public MyFile copyFile(Directory from, Directory target, String fileName) {
-        return api.copyFile(from, target, fileName);
+    public MyFile copyFile(String from, String target, Long fileID) throws InvalidFileException, InvalidDirectoryException {
+        Directory directoryFrom = FileServiceImpl.findDirectory(from);
+        Directory directoryTarget = FileServiceImpl.findDirectory(target);
+        MyFile file = FileServiceImpl.findFileByID(fileID);
+        return service.copyFile(directoryFrom,directoryTarget,file);
     }
 
-    public MyFile moveFile(Directory from, Directory target, String fileName) {
-        return api.moveFile(from, target, fileName);
+
+
+    public MyFile moveFile(String from, String target, Long fileID) throws InvalidFileException, InvalidDirectoryException {
+        Directory directoryFrom = FileServiceImpl.findDirectory(from);
+        Directory directoryTarget = FileServiceImpl.findDirectory(target);
+        MyFile file = FileServiceImpl.findFileByID(fileID);
+        return service.moveFile(directoryFrom,directoryTarget,file);
     }
 }

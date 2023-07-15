@@ -18,4 +18,9 @@ public class Data {
         }
         return system;
     }
+
+    public static void clearSystem() {
+        system = null;
+    }
+
 }

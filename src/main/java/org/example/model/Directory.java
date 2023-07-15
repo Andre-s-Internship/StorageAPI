@@ -33,6 +33,7 @@ public class Directory {
 
     public MyFile addFile(MyFile myFile) {
         files.add(myFile);
+        myFile.setDirectory(this);
         return myFile;
     }
 
@@ -42,11 +43,12 @@ public class Directory {
             if(myFile.getFileName().equals(fileName)) {
                 temp = myFile;
                 files.remove(myFile);
+                myFile.setDirectory(null);
                 break;
             }
         }
         if(temp == null) {
-            //System.out.println("File not found");
+
         }
         return temp;
     }
