@@ -9,8 +9,6 @@ import org.example.model.MyFile;
 import org.example.util.Data;
 
 public class FileServiceImpl implements FileService {
-    public FileServiceImpl() {}
-
     @Override
     public MyFile addFile(Directory directory, MyFile myFile) throws InvalidDirectoryException, InvalidFileException {
         if(!Data.getSystem().contains(directory)) {
@@ -60,7 +58,7 @@ public class FileServiceImpl implements FileService {
         return file;
     }
 
-    public static Directory findDirectory(String path) throws InvalidDirectoryException {
+    public Directory findDirectory(String path) throws InvalidDirectoryException {
         for(Directory directory: Data.getSystem()) {
             if(directory.getPath().equals(path)) {
                 return directory;
@@ -69,7 +67,7 @@ public class FileServiceImpl implements FileService {
         throw new InvalidDirectoryException();
     }
 
-    public static MyFile findFileByID(Long id) throws FileNotFoundException {
+    public MyFile findFileByID(Long id) throws FileNotFoundException {
         for(Directory directory: Data.getSystem()) {
             for(MyFile myFile : directory.getFiles()) {
                 if(myFile.getID().equals(id)){

@@ -19,6 +19,7 @@ public class Data {
         return system;
     }
 
+    //This method is not usable in the project, It is created for running all tests at once without errors
     public static void clearSystem() {
         system = null;
     }

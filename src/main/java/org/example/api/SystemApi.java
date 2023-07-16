@@ -10,15 +10,12 @@ public class SystemApi {
     private final FileServiceImpl service = new FileServiceImpl();
 
     public MyFile addFile(String pathToDirectory, MyFile myFile) throws InvalidFileException, InvalidDirectoryException {
-        return service.addFile(FileServiceImpl.findDirectory(pathToDirectory), myFile);
+        return service.addFile(service.findDirectory(pathToDirectory), myFile);
     }
 
-    public MyFile addFile(String pathToDirectory, Long fileID) throws InvalidFileException, InvalidDirectoryException {
-        return service.addFile(FileServiceImpl.findDirectory(pathToDirectory), service.getFile(fileID));
-    }
 
     public MyFile removeFile(Long fileID) throws FileNotFoundException {
-        MyFile file = FileServiceImpl.findFileByID(fileID);
+        MyFile file = service.findFileByID(fileID);
         return service.removeFile(file);
     }
 
@@ -26,24 +23,21 @@ public class SystemApi {
         return service.getFile(fileID);
     }
 
-
     public String readFile(Long fileID) throws FileNotFoundException {
-        return service.readFile(FileServiceImpl.findFileByID(fileID));
+        return service.readFile(service.findFileByID(fileID));
     }
 
     public MyFile copyFile(String from, String target, Long fileID) throws InvalidFileException, InvalidDirectoryException {
-        Directory directoryFrom = FileServiceImpl.findDirectory(from);
-        Directory directoryTarget = FileServiceImpl.findDirectory(target);
-        MyFile file = FileServiceImpl.findFileByID(fileID);
+        Directory directoryFrom = service.findDirectory(from);
+        Directory directoryTarget = service.findDirectory(target);
+        MyFile file = service.findFileByID(fileID);
         return service.copyFile(directoryFrom,directoryTarget,file);
     }
 
-
-
     public MyFile moveFile(String from, String target, Long fileID) throws InvalidFileException, InvalidDirectoryException {
-        Directory directoryFrom = FileServiceImpl.findDirectory(from);
-        Directory directoryTarget = FileServiceImpl.findDirectory(target);
-        MyFile file = FileServiceImpl.findFileByID(fileID);
+        Directory directoryFrom = service.findDirectory(from);
+        Directory directoryTarget = service.findDirectory(target);
+        MyFile file = service.findFileByID(fileID);
         return service.moveFile(directoryFrom,directoryTarget,file);
     }
 }
