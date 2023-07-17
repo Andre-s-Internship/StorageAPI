@@ -29,7 +29,7 @@ class FileServiceTest {
         Exception exception = assertThrows(MyFileException.class, () -> {
             systemApi.addFile("root", myFile1);
         });
-        String expected = "DirectoryNotFound";
+        String expected = "Directory not found!";
         String actual = exception.getMessage();
         assertEquals(expected, actual);
         Data.clearSystem();
@@ -44,7 +44,7 @@ class FileServiceTest {
         Data.getSystem().add(directory);
         systemApi.addFile("root", myFile1);
         Exception exception = assertThrows(MyFileException.class, () -> systemApi.addFile("root", myFile1));
-        String expectedMessage = "FileAlreadyExists";
+        String expectedMessage = "File with that name already exists";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
         Data.clearSystem();
@@ -61,7 +61,7 @@ class FileServiceTest {
         assertNotNull(systemApi.removeFile(myFile1.getID()));
         Exception exception = assertThrows(MyFileException.class, () -> systemApi.getFile(myFile1.getID()));
 
-        String expectedMessage = "FileNotFound";
+        String expectedMessage = "File not found!";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
 
@@ -82,7 +82,7 @@ class FileServiceTest {
         assertNotNull(systemApi.removeFile(myFile1.getID()));
         Exception exception = assertThrows(MyFileException.class, () -> systemApi.getFile(myFile1.getID()));
 
-        String expectedMessage = "FileNotFound!";
+        String expectedMessage = "File not found!";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
 
@@ -117,7 +117,7 @@ class FileServiceTest {
             systemApi.getFile(100L);
         });
 
-        String expectedMessage = "FileNotFound!";
+        String expectedMessage = "File not found!";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
 
@@ -173,7 +173,7 @@ class FileServiceTest {
         assertNotNull(directory.getFile("name.txt"));
         assertNull(directory1.getFile("name.txt"));
 
-        String expectedMessage = "DirectoryNotFound";
+        String expectedMessage = "Directory not found!";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
         Data.clearSystem();
@@ -210,7 +210,7 @@ class FileServiceTest {
         });
         assertNotNull(directory.getFile("name.txt"));
 
-        String expectedMessage = "DirectoryNotFound";
+        String expectedMessage = "Directory not found!";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
         Data.clearSystem();
