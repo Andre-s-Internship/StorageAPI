@@ -1,9 +1,6 @@
 package org.example.api;
 
-import org.example.Exception.FileAlreadyExistsException;
-import org.example.Exception.InvalidDirectoryException;
-import org.example.Exception.FileNotFoundException;
-import org.example.Exception.InvalidFileException;
+import org.example.Exception.MyFileException;
 import org.example.model.Directory;
 import org.example.model.MyFile;
 import org.example.util.Data;
@@ -14,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileServiceTest {
     @Test
     @DisplayName("Add file to given directory")
-    void addFile() throws InvalidFileException, InvalidDirectoryException {
+    void addFile() throws MyFileException {
         MyFile myFile1 = new MyFile("name.txt", "Hello world");
         SystemApi systemApi = new SystemApi();
         Directory directory = new Directory("root");
@@ -26,13 +23,13 @@ class FileServiceTest {
 
     @Test
     @DisplayName("Add file to non-existing directory")
-    void addFileToInvalidDirectory() throws InvalidFileException, InvalidDirectoryException {
+    void addFileToInvalidDirectory() throws MyFileException {
         MyFile myFile1 = new MyFile("name.txt", "Hello world");
         SystemApi systemApi = new SystemApi();
-        Exception exception = assertThrows(InvalidDirectoryException.class, () -> {
+        Exception exception = assertThrows(MyFileException.class, () -> {
             systemApi.addFile("root", myFile1);
         });
-        String expected = "Directory not found!";
+        String expected = "DirectoryNotFound";
         String actual = exception.getMessage();
         assertEquals(expected, actual);
         Data.clearSystem();
@@ -40,14 +37,14 @@ class FileServiceTest {
 
     @Test
     @DisplayName("Add file with duplicate name to directory")
-    void addFileDuplicate() throws InvalidFileException, InvalidDirectoryException {
+    void addFileDuplicate() throws MyFileException {
         MyFile myFile1 = new MyFile("name.txt", "Hello world");
         SystemApi systemApi = new SystemApi();
         Directory directory = new Directory("root");
         Data.getSystem().add(directory);
         systemApi.addFile("root", myFile1);
-        Exception exception = assertThrows(FileAlreadyExistsException.class, () -> systemApi.addFile("root", myFile1));
-        String expectedMessage = "File with given name already exists in the directory";
+        Exception exception = assertThrows(MyFileException.class, () -> systemApi.addFile("root", myFile1));
+        String expectedMessage = "FileAlreadyExists";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
         Data.clearSystem();
@@ -55,16 +52,16 @@ class FileServiceTest {
 
     @Test
     @DisplayName("Remove file")
-    void removeFile() throws InvalidFileException {
+    void removeFile() throws MyFileException {
         MyFile myFile1 = new MyFile("name.txt", "Hello world");
         SystemApi systemApi = new SystemApi();
         Directory directory = new Directory("root");
         Data.getSystem().add(directory);
         directory.addFile(myFile1);
         assertNotNull(systemApi.removeFile(myFile1.getID()));
-        Exception exception = assertThrows(FileNotFoundException.class, () -> systemApi.getFile(myFile1.getID()));
+        Exception exception = assertThrows(MyFileException.class, () -> systemApi.getFile(myFile1.getID()));
 
-        String expectedMessage = "File not found!";
+        String expectedMessage = "FileNotFound";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
 
@@ -75,7 +72,7 @@ class FileServiceTest {
 
     @Test
     @DisplayName("Remove file from wrong directory")
-    void removeFileException() throws InvalidFileException {
+    void removeFileException() throws MyFileException {
         MyFile myFile1 = new MyFile("name.txt", "Hello world");
         SystemApi systemApi = new SystemApi();
         Directory directory = new Directory("root");
@@ -83,9 +80,9 @@ class FileServiceTest {
         Data.getSystem().add(directory);
         directory.addFile(myFile1);
         assertNotNull(systemApi.removeFile(myFile1.getID()));
-        Exception exception = assertThrows(FileNotFoundException.class, () -> systemApi.getFile(myFile1.getID()));
+        Exception exception = assertThrows(MyFileException.class, () -> systemApi.getFile(myFile1.getID()));
 
-        String expectedMessage = "File not found!";
+        String expectedMessage = "FileNotFound!";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
 
@@ -95,7 +92,7 @@ class FileServiceTest {
 
     @Test
     @DisplayName("Get file")
-    void getFile() throws FileNotFoundException {
+    void getFile() throws MyFileException {
         MyFile myFile1 = new MyFile("name.txt", "Hello world");
         SystemApi systemApi = new SystemApi();
         Directory directory = new Directory("root");
@@ -110,7 +107,7 @@ class FileServiceTest {
     @Test
     @DisplayName("Get file which is not added to system")
     void getFileException()  {
-        Exception exception = assertThrows(FileNotFoundException.class, () -> {
+        Exception exception = assertThrows(MyFileException.class, () -> {
             MyFile myFile1 = new MyFile("name.txt", "Hello world");
             SystemApi systemApi = new SystemApi();
             Directory directory = new Directory("root");
@@ -120,7 +117,7 @@ class FileServiceTest {
             systemApi.getFile(100L);
         });
 
-        String expectedMessage = "File not found!";
+        String expectedMessage = "FileNotFound!";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
 
@@ -132,7 +129,7 @@ class FileServiceTest {
 
     @Test
     @DisplayName("Read given file")
-    void readFile() throws FileNotFoundException {
+    void readFile() throws MyFileException {
         MyFile myFile1 = new MyFile("name.txt", "Hello world");
         SystemApi systemApi = new SystemApi();
         Directory directory = new Directory("root");
@@ -146,7 +143,7 @@ class FileServiceTest {
 
     @Test
     @DisplayName("Copy file")
-    void copyFile() throws InvalidFileException, InvalidDirectoryException {
+    void copyFile() throws MyFileException {
         MyFile myFile1 = new MyFile("name.txt", "Hello world");
         SystemApi systemApi = new SystemApi();
         Directory directory = new Directory("root");
@@ -169,14 +166,14 @@ class FileServiceTest {
         Directory directory1 = new Directory("path");
         Data.getSystem().add(directory);
         directory.addFile(myFile1);
-        Exception exception = assertThrows(InvalidDirectoryException.class, () -> {
+        Exception exception = assertThrows(MyFileException.class, () -> {
             systemApi.copyFile("root", "path", myFile1.getID());
 
         });
         assertNotNull(directory.getFile("name.txt"));
         assertNull(directory1.getFile("name.txt"));
 
-        String expectedMessage = "Directory not found!";
+        String expectedMessage = "DirectoryNotFound";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
         Data.clearSystem();
@@ -184,7 +181,7 @@ class FileServiceTest {
 
     @Test
     @DisplayName("Move file")
-    void moveFile() throws InvalidFileException, InvalidDirectoryException {
+    void moveFile() throws MyFileException {
         MyFile myFile1 = new MyFile("name.txt", "Hello world");
         SystemApi systemApi = new SystemApi();
         Directory directory = new Directory("root");
@@ -200,20 +197,20 @@ class FileServiceTest {
 
     @Test
     @DisplayName("Move file to wrong directory")
-    void moveFileException() throws InvalidFileException, InvalidDirectoryException {
+    void moveFileException() {
         MyFile myFile1 = new MyFile("name.txt", "Hello world");
         SystemApi systemApi = new SystemApi();
         Directory directory = new Directory("root");
         Directory directory1 = new Directory("path");
         Data.getSystem().add(directory);
         directory.addFile(myFile1);
-        Exception exception = assertThrows(InvalidDirectoryException.class, () -> {
+        Exception exception = assertThrows(MyFileException.class, () -> {
             systemApi.moveFile("root", "path", myFile1.getID());
 
         });
         assertNotNull(directory.getFile("name.txt"));
 
-        String expectedMessage = "Directory not found!";
+        String expectedMessage = "DirectoryNotFound";
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
         Data.clearSystem();
