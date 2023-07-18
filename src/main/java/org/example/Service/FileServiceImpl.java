@@ -5,6 +5,9 @@ import org.example.Exception.MyFileException;
 import org.example.model.Directory;
 import org.example.model.MyFile;
 import org.example.util.Data;
+
+import java.util.UUID;
+
 public class FileServiceImpl implements FileService {
     @Override
     public MyFile addFile(Directory directory, MyFile myFile) throws MyFileException {
@@ -34,7 +37,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public MyFile getFile(Long fileID) throws MyFileException {
+    public MyFile getFile(UUID fileID) throws MyFileException {
         return findFileByID(fileID);
     }
 
@@ -64,7 +67,7 @@ public class FileServiceImpl implements FileService {
         throw new MyFileException(ExceptionMessage.DirectoryNotFound);
     }
 
-    public MyFile findFileByID(Long id) throws MyFileException {
+    public MyFile findFileByID(UUID id) throws MyFileException {
         for(Directory directory: Data.getSystem()) {
             for(MyFile myFile : directory.getFiles()) {
                 if(myFile.getID().equals(id)){

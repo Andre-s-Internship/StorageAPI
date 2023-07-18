@@ -5,6 +5,8 @@ import org.example.Service.FileServiceImpl;
 import org.example.model.Directory;
 import org.example.model.MyFile;
 
+import java.util.UUID;
+
 public class SystemApi {
     private final FileServiceImpl service = new FileServiceImpl();
 
@@ -13,27 +15,27 @@ public class SystemApi {
     }
 
 
-    public MyFile removeFile(Long fileID) throws MyFileException {
+    public MyFile removeFile(UUID fileID) throws MyFileException {
         MyFile file = service.findFileByID(fileID);
         return service.removeFile(file);
     }
 
-    public MyFile getFile(Long fileID) throws MyFileException {
+    public MyFile getFile(UUID fileID) throws MyFileException {
         return service.getFile(fileID);
     }
 
-    public String readFile(Long fileID) throws MyFileException {
+    public String readFile(UUID fileID) throws MyFileException {
         return service.readFile(service.findFileByID(fileID));
     }
 
-    public MyFile copyFile(String from, String target, Long fileID) throws MyFileException {
+    public MyFile copyFile(String from, String target, UUID fileID) throws MyFileException {
         Directory directoryFrom = service.findDirectory(from);
         Directory directoryTarget = service.findDirectory(target);
         MyFile file = service.findFileByID(fileID);
         return service.copyFile(directoryFrom,directoryTarget,file);
     }
 
-    public MyFile moveFile(String from, String target, Long fileID) throws MyFileException {
+    public MyFile moveFile(String from, String target, UUID fileID) throws MyFileException {
         Directory directoryFrom = service.findDirectory(from);
         Directory directoryTarget = service.findDirectory(target);
         MyFile file = service.findFileByID(fileID);

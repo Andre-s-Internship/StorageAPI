@@ -6,6 +6,9 @@ import org.example.model.MyFile;
 import org.example.util.Data;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileServiceTest {
@@ -114,7 +117,7 @@ class FileServiceTest {
             Data.getSystem().add(directory);
 
             directory.addFile(myFile1);
-            systemApi.getFile(100L);
+            systemApi.getFile(UUID.randomUUID());
         });
 
         String expectedMessage = "File not found!";
